@@ -112,6 +112,10 @@ def predict_image(image):
 def home():
     return jsonify({"message": "Backend is running"}), 200
 
+@app.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "ok"}), 200
+
 @app.route("/predict", methods=["POST"])
 def predict():
     if 'file' not in request.files:
@@ -129,10 +133,6 @@ def predict():
 
     except Exception as e:
         return jsonify({"error": f"Error processing image: {e}"}), 500
-
-@app.route("/health", methods=["GET"])
-def health_check():
-    return jsonify({"status": "ok"}), 200
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
