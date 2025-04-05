@@ -6,24 +6,24 @@ import numpy as np
 import io
 import os
 import requests
+import gdown  # <-- NEW
 
 app = Flask(__name__)
 CORS(app, resources=r'/*', origins='*')
 
 # Constants
-MODEL_URL = "https://drive.google.com/uc?id=12AHcBgU5nfZ2LFATLZJJaUf0eJNN6ZX_"
+FILE_ID = "12AHcBgU5nfZ2LFATLZJJaUf0eJNN6ZX_"
 MODEL_PATH = "trained_model.keras"
 
-# Download the model if it doesn't exist locally
+# Use gdown to download model correctly
 def download_model_if_needed():
     if not os.path.exists(MODEL_PATH):
-        print("Downloading model from Google Drive...")
-        response = requests.get(MODEL_URL)
-        with open(MODEL_PATH, "wb") as f:
-            f.write(response.content)
+        print("Downloading model from Google Drive using gdown...")
+        gdown.download(f"https://drive.google.com/uc?id={FILE_ID}", MODEL_PATH, quiet=False)
         print("Model downloaded successfully!")
 
-# Load the model once when the app starts
+
+# Download and load model
 download_model_if_needed()
 model = tf.keras.models.load_model(MODEL_PATH)
 print("Model loaded successfully!")
